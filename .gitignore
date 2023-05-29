@@ -4,3 +4,7 @@ node_modules/
 .DS_Store
 *.toml
 build/
+*.zip
+TODO.md
+TODO.mdx
+

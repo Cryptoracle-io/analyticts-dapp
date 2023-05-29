@@ -23,9 +23,12 @@ import {
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import { useLocalStorage } from '../utils/useLocalStorage';
 
 
 const Layout = (props) => {
+
+    const [LayoutMode,setLayoutMode] = useLocalStorage('layoutMode','');
     const [headerClass, setHeaderClass] = useState("");
     const dispatch = useDispatch();
     const {
@@ -90,11 +93,14 @@ const Layout = (props) => {
         leftsidbarSizeType,
         leftSidebarViewType,
         dispatch]);
+
+    
     /*
     call dark/light mode
     */
     const onChangeLayoutMode = (value) => {
         if (changeLayoutMode) {
+            
             dispatch(changeLayoutMode(value));
         }
         if(changeSidebarTheme) {

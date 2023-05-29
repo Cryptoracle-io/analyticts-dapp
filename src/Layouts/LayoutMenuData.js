@@ -104,10 +104,36 @@ const Navdata = () => {
             }
         },
         {
+            id: "dashboard",
+            label: "Whales Tracker",
+            icon: <i className=" ri-trophy-line"></i>,
+            link: "/whales-tracker",
+            stateVariables: isDashboard,
+            click: function (e) {
+                e.preventDefault();
+                setIsDashboard(!isDashboard);
+                setIscurrentState('Dashboard');
+                updateIconSidebar(e);
+            }
+        },
+        {
             id: "nearhighlights",
             label: "NEAR Highlights",
             icon: <i className="ri-star-s-line" />,
             link: "/near-highlights",
+            stateVariables: isDashboard,
+            click: function (e) {
+                e.preventDefault();
+                setIsDashboard(!isDashboard);
+                setIscurrentState('Dashboard');
+                updateIconSidebar(e);
+            }
+        },
+        {
+            id: "dashboard",
+            label: "Featured Collections",
+            icon: <FeatherIcon icon="award" className="icon-dual" />,
+            link: "/partners",
             stateVariables: isDashboard,
             click: function (e) {
                 e.preventDefault();

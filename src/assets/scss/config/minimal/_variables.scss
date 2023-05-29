@@ -9,7 +9,9 @@
 
 // Prefix for :root CSS variables
 
-$variable-prefix:             vz-;
+$variable-prefix:             vz-; // Deprecated in v5.2.0 for the shorter `$prefix`
+$prefix:                      $variable-prefix;
+
 
 // Font Family
 $font-family-primary:                             'Exo 2', sans-serif;

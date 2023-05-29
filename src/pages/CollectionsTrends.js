@@ -1,4 +1,4 @@
-import React,{ useMemo, useEffect, useState } from 'react';
+import React,{ useMemo, useEffect, useState, useRef } from 'react';
 import { Container,Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import BreadCrumb from  "../Components/Common/BreadCrumb";
@@ -6,9 +6,12 @@ import TableContainer from "../Components/Common/TableContainer";
 import { format , formatNumber, formatyocto} from '../helpers/lib';
 import axios from 'axios';
 import TopPerformers from '../Components/Common/TopPerformers'
-import TopPerformersNear from '../Components/Common/TopPerformersNear';
+import { TopPerformersNear } from '../Components/Common/TopPerformersNear';
+import FeaturedBlogs from '../Components/Common/FeaturedBlogs'
+import FeaturedCollections from '../Components/Common/FeaturedCollections'
 import FeatherIcon from "feather-icons-react";
-
+import Loader from '../Components/Common/Loader';
+import {NearSvg} from '../Components/Common/utils';
 export default function CollectionsTrends(props){
 
     const [collections, setCollections] = useState(null);
@@ -16,8 +19,9 @@ export default function CollectionsTrends(props){
     const [nearPrice, setnearPrice] = useState(null);
     const [activitiesBuyers, setActivitiesBuyers] = useState([]);
     const [activitiesSellers, setActivitiesSellers] = useState([]);
+    const featuredCollectionsRef = useRef(null);
     const init = async () => {
-        const requestActivities = await fetch(process.env.REACT_APP_API_URL + '/activities/top-users?__limit=20');
+        const requestActivities = await fetch(process.env.REACT_APP_API_URL + '/activities/top-users?__limit=30');
         let HighestSales = await fetch(process.env.REACT_APP_API_URL + '/top-token');
         let HighestSalesJson = await HighestSales.json();
         //console.log("HighestSalesJson", HighestSalesJson);
@@ -47,7 +51,7 @@ export default function CollectionsTrends(props){
         let colsActivities = [];
         
         for(let collectionActivities of resultActivities.data.collections){
-            let op = axios.get(process.env.REACT_APP_API_URL + '/collections?collection_id=' + collectionActivities.collection_id) ;
+            let op = axios.get(process.env.REACT_APP_API_URL + '/collections?collection_id=' + collectionActivities.collection_id + '&__lookup_collection_volumes=true') ;
             colsActivities.push(op);
         }    
 
@@ -61,15 +65,15 @@ export default function CollectionsTrends(props){
                 colsCollections.push({
                     collection: 
                     <div className="d-flex align-items-center">
-                    <Link to={'/collections/' + collectionStatsDetailsFiltered.collection_id}><img alt="" className="avatar-sm rounded-circle" src={process.env.REACT_APP_IPFS_URL2 + '/' + collectionStatsDetailsFiltered.media} /></Link>
+                    <Link to={'/collections/' + collectionStatsDetailsFiltered.collection_id}><img alt="" className="avatar-sm rounded-circle" src={ process.env.REACT_APP_IMAGES + '/image-resizing?width=80&image=' + process.env.REACT_APP_IPFS_URL2 + '/' + collectionStatsDetailsFiltered.media} /></Link>
                         <div className="ms-3">                                            
                             <Link to={'/collections/' + collectionStatsDetailsFiltered.collection_id}><h5 className="fs-15 mb-1">{collectionStatsDetailsFiltered.collection}</h5></Link>                                    
-                            <p className="mb-0 text-muted">by {collectionStatsDetailsFiltered.creator_id}</p>
+                            <p className="mb-0 text-muted ms-0">by {collectionStatsDetailsFiltered.creator_id}</p>
                         </div> 
                     </div>,
                     volume:formatyocto(collectionStatsDetailsFiltered.volume),
                     volume7d:formatyocto(resultActivities.data.collections[i].total_sum),
-                    market_cap: formatNumber(formatyocto(collectionStatsDetailsFiltered.avg_price) * collectionStatsDetailsFiltered.total_cards) ,
+                    change: parseInt(collectionStatsDetailsFiltered.price_change) ,
                     average: formatyocto(collectionStatsDetailsFiltered.avg_price ),     
                     floor: formatyocto(collectionStatsDetailsFiltered.floor_price,0),
                     sales7d:(resultActivities.data.collections[i].contract_token_ids.length),
@@ -104,8 +108,8 @@ export default function CollectionsTrends(props){
                 disableSortBy: false,
                 Cell: (cell) => {
                     return ( <div className="flex-grow-1 ms-3">
-                                        <h6 className="fs-14 mb-1">{format(cell.value *1)} Ⓝ </h6>
-                                        <h6 className="text-muted mb-0"> $ {format(cell.value * nearPrice)}</h6>
+                                        <h6 className="fs-14 mb-1"><NearSvg size=".8em"/> {format(cell.value *1)} </h6>
+                                        <h6 className="text-muted ms-0">$ {format(cell.value * nearPrice)}</h6>
                                     </div> );
                     
                 }
@@ -117,20 +121,22 @@ export default function CollectionsTrends(props){
                 defaultColumn: true,
                 Cell: (cell) => {
                     return ( <div className="flex-grow-1 ms-3">
-                                        <h6 className="fs-14 mb-1">{format(cell.value *1)} Ⓝ </h6>
-                                        <h6 className="text-muted mb-0"> $ {format(cell.value * nearPrice)}</h6>
+                                        <h6 className="fs-14 mb-1"><NearSvg size=".8em"/> {format(cell.value *1)} </h6>
+                                        <h6 className="text-muted ms-0">$ {format(cell.value * nearPrice)}</h6>
                                     </div> );
                     
                 }
             },
             {
-                Header: "Market Cap",
-                accessor: "market_cap",
+                Header: "% change",
+                accessor: "change",
                 defaultColumn: false,
                 Cell: (cell) => {
-                        return ( <div className="flex-grow-1 ms-3">
-                                            <h6 className="fs-14 mb-1">{format(cell.value*1)} Ⓝ </h6>
-                                            <h6 className="text-muted mb-0"> $ {format(cell.value * nearPrice)}</h6>
+                        return ( <div className="flex-grow-1 ms-1" key={cell.value + 1}>
+                                            {cell.value > 0 ? <h6 className={"fs-16 mb-0 text-success"}><i className={"align-middle me-1 mdi mdi-trending-up"}></i>{cell.value} %</h6>
+                                            : cell.value < 0 ?<h6 className={"fs-16 mb-0 text-danger"}><i className={"align-middle me-1 mdi mdi-trending-down "}></i>{cell.value} %</h6>
+                                        : <h6 className={"fs-13 mb-0"}> 0 %</h6>}
+                                            
                                         </div> );
                 }
 
@@ -141,8 +147,8 @@ export default function CollectionsTrends(props){
                 disableSortBy: false,
                 Cell: (cell) => {
                     return (<div className="flex-grow-1 ms-3">
-                                <h6 className="fs-14 mb-1">{format(cell.value)} Ⓝ</h6>
-                                <h6 className="text-muted mb-0"> $ {format(cell.value * nearPrice) }</h6>
+                                <h6 className="fs-14 mb-1 "><NearSvg size=".8em"/> {format(cell.value)}</h6>
+                                <h6 className="text-muted ms-0"> $ {format(cell.value * nearPrice) }</h6>
                             </div> );
                 }
             },
@@ -152,7 +158,7 @@ export default function CollectionsTrends(props){
                 filterable: true,
                 Cell: (cell) => {
                     return (<div className="flex-grow-1 ms-3">
-                                <h6 className="fs-14 mb-1">{format(cell.value)} Ⓝ</h6>
+                                <h6 className="fs-14 mb-1"><NearSvg size=".8em"/> {format(cell.value)}</h6>
                                 
                             </div> );
                 }
@@ -203,6 +209,17 @@ export default function CollectionsTrends(props){
             },
         ],
     [nearPrice]);
+    const scrollToFeaturedCollections = () => {
+        featuredCollectionsRef.current.scrollIntoView({ behavior: 'smooth' });
+      };
+
+    useEffect(() => {
+        const hash = window.location.hash;
+        if (hash === '#featured-collections') {
+          featuredCollectionsRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, []);
+    
 
     return (
         
@@ -234,7 +251,7 @@ export default function CollectionsTrends(props){
                                                 />
                                         }
                                         {!collections &&
-                                            <div>Loading...</div>
+                                            <Loader />
                                         }
                                     </div>
                                 </div>
@@ -242,9 +259,13 @@ export default function CollectionsTrends(props){
                         </div>
                         <Row>
                             
-                            <TopPerformersNear data={activitiesBuyers.slice(10)} performer="Buyers"/>
-                            <TopPerformersNear data={activitiesSellers.slice(10)} performer="Sellers"/>
+                            <TopPerformersNear data={activitiesBuyers.slice(0,10)} performer="Buyers"/>
+                            <TopPerformersNear data={activitiesSellers.slice(0,10)} performer="Sellers"/>
                             <TopPerformers data={highestSales} />
+                            <div ref={featuredCollectionsRef}>
+                                <FeaturedCollections />
+                            </div>
+                            <FeaturedBlogs />
                         
                         </Row>
                 </Container>

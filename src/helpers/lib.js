@@ -1,8 +1,8 @@
 export function format(num,dec=2){
     return (num).toLocaleString('en-US', {maximumFractionDigits:dec});
 }
-export function formatNumber(num){
-    let nu =new Number(num).toFixed(2) ;
+export function formatNumber(num,dec=2){
+    let nu =new Number(num).toFixed(dec) ;
     return nu
 }
 export function formatyocto(num,dec=2){

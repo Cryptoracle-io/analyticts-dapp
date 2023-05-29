@@ -3,44 +3,54 @@ import { Container,  Card, CardBody, Col, Row, CardHeader } from 'reactstrap';
 import { useParams , Link } from 'react-router-dom';
 import BreadCrumb from  "../Components/Common/BreadCrumb";
 import TableContainer from "../Components/Common/TableContainer";
-import Chart from "../Components/Common/Chart";
+
+import TopHolders from "../Components/Common/TopHolders";
+import { Chart } from "../Components/Common/Chart";
 import ReactTooltip from 'react-tooltip';
 import { formatyocto , format } from '../helpers/lib';
 import parasicon from '../assets/images/near/paras.png';
-
+import Loader from '../Components/Common/Loader';
+import {Cards , Tabs } from '../Components/Common/CollectionProfileItems';
+import {featuredCollections} from "../data/FeaturedPartners"
 export default function CollectionProfile(props){
+    document.title = "Collection";
+
+    window.onscroll = function () {
+        scrollFunction();
+    };
 
     let { collectionId } = useParams();
-
     const [data, setData] = useState(null);
     const [historic, setHistoric] = useState(null);
-    const [tableData, setTableData] = useState(null);
     const [ready, setReady] = useState(false);
     const [volume, setVolume] = useState(null);
     const [dateSale, setDateSale] = useState(null);
-
+    const [onSaleData, setOnSaleData] = useState(null);
+    const [topHoldersData, settopHoldersData] = useState(null);
+    const [featured, setFeatured] = useState(null);
+  
+    
+    const [displayCategory, setCategory] = useState("All");
     const init = async () => {
+        settopHoldersData(collectionId);
+        const requestCollectionsId = await fetch(process.env.REACT_APP_API_URL + '/collections?collection_id=' + collectionId);
+        const resultCollectionsId = await requestCollectionsId.json();
+        const requestCollectionDailyId = await fetch(process.env.REACT_APP_API_URL + '/collection-daily?collection_id=' + collectionId);
+        const resultCollectionDailyId = await requestCollectionDailyId.json();
+
+        // const requestCollectionOnsale = await fetch(process.env.REACT_APP_API_URL + '/token-series?exclude_total_burn=true&lookup_token=true&__limit=12&__sort=metadata.rank::1&collection_id=' + collectionId + '&has_price=true');
+        // const resultCollectionOnsale = await requestCollectionOnsale.json();
+
         
-        let requestCollectionsId = await fetch(process.env.REACT_APP_API_URL + '/collections?collection_id=' + collectionId);
-        let resultCollectionsId = await requestCollectionsId.json();
-        setData(resultCollectionsId.data.results[0]);
-
-        let requestCollectionDailyId = await fetch(process.env.REACT_APP_API_URL + '/collection-daily?collection_id=' + collectionId);
-        let resultCollectionDailyId = await requestCollectionDailyId.json();
-        setHistoric(resultCollectionDailyId);
-
-        let requestCollectionActivities = await fetch(process.env.REACT_APP_API_URL + '/collection-activities?collection_id=' + collectionId + '&filter=sale&__skip=0&__limit=10&__sort=des_issued_at');
-        let resultCollectionActivities = await requestCollectionActivities.json();
-
         //console.log("profile",data);
 
         let colsVolume = [];
         let colsDate = [];
-        let colsTableData = [];
-
+        const stringExists = featuredCollections.some(item => item.collectionID === collectionId);
+        setFeatured(stringExists);
         for(let collection of resultCollectionDailyId.data.volume_daily.slice(15,29)){
         
-            let opSale = String(formatyocto(collection.volume,0) + "Ⓝ");
+            let opSale = String(formatyocto(collection.volume,0));
             let opDate = String(collection.date).substring(5,10);
             
             colsVolume.push(opSale);
@@ -51,75 +61,26 @@ export default function CollectionProfile(props){
         let colsDateComplete = await Promise.all(colsDate);
         //console.log("All Table helper",colsTableData);
 
-        for(let collection2 of resultCollectionActivities.data){
 
-            let metadataTitle = collection2.data.map((metad)=>metad.metadata.title);
-            let metadataImage = collection2.data.map((metad)=>metad.metadata.media);
-
-            let opDate = collection2.msg.datetime;
-            let opTitle = metadataTitle;
-            let opImage = String(metadataImage);
-            let isHttp = opImage.includes("://");
-            let opFrom = collection2.from;
-            //console.log('From', isHttp);
-            let opOwner = collection2.to;
-            //console.log('Owner', opOwner)
-            let opSale = String( formatyocto(collection2.price)+" Ⓝ");
-            let opStatus = collection2.type;
-            let ipfspic 
-            if (isHttp > 0 ) {
-                ipfspic =opImage 
-            }else{
-                ipfspic = process.env.REACT_APP_IPFS_URL2 + "/" + opImage
-            } 
-
-            colsTableData.push(
-                {   
-                    title: 
-                    <>
-                        <div className="d-flex align-items-center">
-                            <img alt="" className="avatar-md rounded" src={ipfspic} />
-
-                        <div className="ms-3">                                            
-                                <p className="mb-0 text">{opTitle}</p>
-                            </div> 
-                        </div>
-                    </>,
-                    from: 
-                    <>
-                        <>
-                        <button data-tip data-for={opDate+"registerTipFrom"} className='toolTipButton'><h6>{String(opFrom).substring(0,16)}</h6></button> 
-                        <ReactTooltip id={opDate+"registerTipFrom"} place="top" effect="solid">{opFrom}</ReactTooltip>
-                        </>
-                    </>,
-                    owner: 
-                    <>
-
-                        <>
-                        <button data-tip data-for={opDate+"registerTipOwner"} className='toolTipButton'><h6>{String(opOwner).substring(0,16)}</h6></button> 
-                        <ReactTooltip id={opDate+"registerTipOwner"} place="top" effect="solid"><h6>{opOwner}</h6></ReactTooltip>
-                        </>
-                    </>
-                    ,
-                    date: String(opDate).substring(0,10),
-                    price: opSale,
-                    operation: opStatus
-                }
-                
-            );
-        }
-        let colsTableDataComplete = await Promise.all(colsTableData);
         setReady(true);
-        setVolume(colsVolumeComplete)
-        setDateSale(colsDateComplete)
-        setTableData(colsTableDataComplete)
+        setVolume(colsVolumeComplete);
+        setDateSale(colsDateComplete);
+        setHistoric(resultCollectionDailyId);
+        setData(resultCollectionsId.data.results[0]);
+        
+        // setOnSaleData(resultCollectionOnsale)
+        
         //console.log("Complete",colsTableDataComplete);
     };
 
     useEffect(() => {
         init();
     }, []);
-
+    let tog_backdrop = async () =>{
+        // let requestCollectionOnsale = await fetch(process.env.REACT_APP_API_URL + '/token-series?exclude_total_burn=true&lookup_token=true&__limit=10&__sort=metadata.rank::-1&collection_id=' + collectionId + '&has_price=true');
+        // let resultCollectionOnsale = await requestCollectionOnsale.json();
+        // setOnSaleData(resultCollectionOnsale);
+    }
     const columns = useMemo(
         () => [
             {                
@@ -152,29 +113,53 @@ export default function CollectionProfile(props){
             }
         ],
     []);
+
+    const scrollFunction = () => {
+        const element = document.getElementById("back-to-top");
+        if (element) {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+    };
+
+    const toTop = () => {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    };
     //console.log("DATA", data);
-    if(!ready) return <Container fluid={true}>Loading...</Container>
-
-    return (<div className="page-content">
+    if(!data) {
+        return <div className="page-content">
             <Container fluid={true}>
-                
-                <BreadCrumb title="Collection Profile" breadcrumbItem="Collection Profile" />
-                
-                <Row>
+                <Loader />
+            </Container>
+        </div>
+    }
 
+    return ((<div className="page-content">
+            <Container fluid={true}>                
+                <BreadCrumb title="Collection Profile" breadcrumbItem="Collection Profile" />                
+                <Row>
                     <Col md={3}>
                         <Card className={"card-animate"}>
                             <CardHeader className="border-0 align-items-center d-flex">
-                                <h2 className="card-title mb-0 flex-grow-1 fs-2">{data.collection}</h2>
+                            {featured ? <h2 className="card-title mb-0 flex-grow-1 fs-2 text-primary">{data.collection}</h2>
+                            : <h2 className="card-title mb-0 flex-grow-1 fs-2">{data.collection}</h2>}
                             </CardHeader>
                             <CardBody>
-                            
-                                <img alt="" src={process.env.REACT_APP_IPFS_URL2 + '/' + data.media} style={{maxWidth: '100%'}} className="rounded" />
-                                
+
+                                <Card className="ribbon-box border shadow-none right">
+                                {featured ? 
+                                <div className="ribbon-two ribbon-two-primary"><span><i className="mdi  mdi-star-outline align-bottom"></i> Featured</span></div> : ""}                            
+                                <img alt="" src={ process.env.REACT_APP_IMAGES + '/image-resizing?width=499&image=' + process.env.REACT_APP_IPFS_URL2 + '/' + data.media} style={{maxWidth: '100%'}} className="rounded" />                                
+                                </Card>
                                 <div className="d-flex flex-wrap gap-2 mt-4 text-center">
-                                    {(data.socialMedia && data.socialMedia.discord !== undefined) ?  
+                                {( data.socialMedia ) ? <>
+                                    {(data.socialMedia.discord && data.socialMedia.discord !== "" && data.socialMedia.discord != null) ?  
                                         <div>
-                                            <a href={`https://discord.gg/${data.socialMedia.discord}`} className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">       
+                                            <a href={data.socialMedia.discord.includes("htt") ? `${data.socialMedia.discord}` : `https://discord.gg/${data.socialMedia.discord}`} className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">       
                                                 <span
                                                     className="avatar-title rounded-circle fs-16 bg-soft-dark text-dark text-center text-light">
                                                     <i className="ri-discord-fill"></i>
@@ -182,25 +167,26 @@ export default function CollectionProfile(props){
                                             </a>
                                         </div> : <></> }
 
-                                    {(data.socialMedia && data.socialMedia.twitter !== undefined) ?
+                                    {( data.socialMedia.twitter && data.socialMedia.twitter !== "" && data.socialMedia.twitter != null) ?
                                     <div>
-                                        <a href={ `https://twitter.com/${data.socialMedia.twitter}`} className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">
+                                        <a href={data.socialMedia.twitter.includes("htt") ? `${data.socialMedia.twitter}` : `https://twitter.com/${data.socialMedia.twitter}` } className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">
                                             <span
                                                 className="avatar-title rounded-circle fs-16 bg-soft-dark text-dark text-light">
                                                 <i className="ri-twitter-fill"></i>
                                             </span>
                                         </a>
                                     </div>: ""}
-                                    {(data.socialMedia && data.socialMedia.website !== undefined) ?
+                                    {( data.socialMedia.website && data.socialMedia.website != null && data.socialMedia.website !== "") ?
                                     <div>
-                                        <a href={ `${data.socialMedia.website}`} className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">
+                                        <a href={ data.socialMedia.website.includes("htt") ? `${data.socialMedia.website}` : `https://${data.socialMedia.website}` } className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">
                                             <span
                                                 className="avatar-title rounded-circle fs-16 bg-soft-dark text-dark text-light">
                                                 <i className="ri-global-fill"></i>
                                             </span>
                                         </a>
                                     </div>: ""}
-                                    
+                                    </> : ""
+                                }                                    
                                     <div>
                                         <a href={ `https://paras.id/collection/${data.collection_id}`} className="avatar-xs d-block" target="_blank" rel="noreferrer noopener">
                                             <span
@@ -215,134 +201,37 @@ export default function CollectionProfile(props){
                                 </div>
                             </CardBody>
                         </Card>
-
-
                         <Card className={"card-animate"}>
                             <CardHeader className="border-0 align-items-center d-flex">
-                                <h4 className="card-title mb-0 flex-grow-1">Sales volume :</h4>
-                                
+                                <h4 className="card-title mb-0 flex-grow-1">Sales volume :</h4>                          
                             </CardHeader>
                             <CardBody>
-                                {!!historic &&
+                                {historic && !!historic &&                               
                                     <Chart dataColors='["#2a81b3"]' datasale={volume} datadate={dateSale} />
                                 }
                             </CardBody>
                         </Card>
-
+                        <TopHolders  data={(topHoldersData)} performer={data.total_cards}/>
+                        
                     </Col>
-
                     <Col md={9}>
                         <Row>
-                            <Col md={4}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h3 className=" card-title mb-0 flex-grow-6">Total volume</h3>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <h3 className="lh-lg card-title mb-0 flex-grow-6">{format(formatyocto(data.volume)*1)} Ⓝ</h3>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                            <Col md={4}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h4 className="card-title mb-0 flex-grow-1">Avg price</h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                    <h3 className="card-title mb-0 flex-grow-6">{formatyocto(data.avg_price)} Ⓝ</h3>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                            <Col md={4}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h4 className="card-title mb-0 flex-grow-1">Floor price</h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                    <h3 className="card-title mb-0 flex-grow-6">{formatyocto(data.floor_price)} Ⓝ</h3>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                            <Cards data={format(formatyocto(data.volume) * 1)} Title="Total volume" icon={"trending-up"} name={"text-success"} nearicon={true}/>
+                            <Cards data={formatyocto(data.floor_price ) } Title="Floor price" icon={"activity"} name={"text-primary"} nearicon={true} />
+                            <Cards data={formatyocto(data.avg_price ) } Title="Avg price" icon={"bar-chart-2"} name={"text-primary"} nearicon={true}/>
                         </Row>
-
                         <Row>
-                            <Col md={4}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h4 className="card-title mb-0 flex-grow-1">Total sales</h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                    <h3 className="card-title mb-0 flex-grow-6">{data.total_sales}</h3>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                            
-                            <Col md={4}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h4 className="card-title mb-0 flex-grow-1">Total owners</h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                    <h3 className="card-title mb-0 flex-grow-6">{data.total_owners}</h3>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                            <Col md={4}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h4 className="card-title mb-0 flex-grow-1">Total cards</h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                    <h3 className="card-title mb-0 flex-grow-6">{data.total_cards}</h3>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                            <Cards data={data.total_sales} Title="Total sales" icon={"arrow-up"} name={"text-primary"}/>   
+                            <Cards data={data.total_owners} Title="Total owners" icon={"users"} name={"text-primary"}/>                        
+                            <Cards data={data.total_cards} Title="Total cards" icon={"layers"} name={"text-primary"}/>
                         </Row>
-
-                        <Row>
-                            <Col md={12}>
-                                <Card className={"card-animate"}>
-                                    <CardHeader className="border-0 align-items-center d-flex">
-                                        <h4 className="card-title mb-0 flex-grow-1">Last Sales</h4>
-                                    </CardHeader>
-                                    <CardBody>
-                                    <div className="row">
-                                        <div className="col-lg-12">
-                                            <div className="card" id="contactList">
-                                                <div className="card-body pt-0">
-                                                    {!!tableData &&
-                                                        <TableContainer                        
-                                                            columns={columns}
-                                                            data={(tableData || [])}
-                                                            isGlobalFilter={false}
-
-                                                            customPageSize={10}
-                                                            className="custom-header-css"
-                                                            divClass="table-responsive table-card mb-1"
-                                                            tableClass="align-middle table-nowrap"
-                                                            theadClass="table-light text-muted"
-                                                            isNFTRankingFilter={false}
-                                                            />
-                                                    }
-                                                    {!tableData &&
-                                                        <div>Loading...</div>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>                       
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        </Row>
-
-                    </Col>
-
-                    
-                </Row>
-                
-            
-                
+                            <Tabs/>
+                    </Col>                    
+                </Row>               
             </Container>
-        </div>);
+            <button onClick={() => toTop()} className="btn btn-primary btn-icon landing-back-top" id="back-to-top">
+                    <i className="ri-arrow-up-line"></i>
+                </button>
+        </div>
+        ));
 }

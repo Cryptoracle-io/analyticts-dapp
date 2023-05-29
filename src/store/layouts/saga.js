@@ -44,6 +44,9 @@ function* changeLayoutTheme({ payload: layout }) {
  * @param {*} param0
  */
 function* changeLayoutMode({ payload: mode }) {
+    if(mode) {
+        localStorage.setItem('layout-mode', mode);
+    }
     try {
         yield call(changeHTMLAttribute, "data-layout-mode", mode);
     } catch (error) {

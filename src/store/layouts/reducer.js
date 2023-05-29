@@ -24,10 +24,14 @@ import {
   leftSidebarImageTypes  
 } from "../../Components/constants/layout";
 
+const getInitialLayoutModeState = () => {
+  return localStorage.getItem('layout-mode');
+}
+
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,
-  leftSidebarType: leftSidebarTypes.LIGHT,
-  layoutModeType: layoutModeTypes.LIGHTMODE,
+  leftSidebarType: getInitialLayoutModeState() || leftSidebarTypes.LIGHT,
+  layoutModeType: getInitialLayoutModeState() || layoutModeTypes.LIGHTMODE,
   layoutWidthType: layoutWidthTypes.FLUID,
   layoutPositionType: layoutPositionTypes.FIXED,
   topbarThemeType: topbarThemeTypes.LIGHT,

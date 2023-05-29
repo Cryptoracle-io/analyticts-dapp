@@ -611,7 +611,7 @@
                         >a.menu-link {
                             position: relative;
                             width: calc(200px + #{$vertical-menu-width-sm});
-                            color: $white;
+                            color: $vertical-menu-item-active-color;
                             background-color: $vertical-menu-bg-dark;
                             transition: none;
 

@@ -10,10 +10,11 @@ import logoLight from "../assets/images/favicon.png";
 //import Components
 
 import LightDark from "../Components/Common/LightDark";
-import Login from "../Components/Common/Login";
-import ModalC from "../Components/Common/ModalC";
+import Login from "../Components/Common/Login3";
 import FullScreenDropdown from '../Components/Common/FullScreenDropdown';
-
+import ProfileDropdown from '../Components/Common/ProfileDropdown';
+import ModalCTest from "../Components/Common/SignUpModal/ModalCTest";
+import ModalFeedback from "../Components/Common/ModalFeedback";
 const Header = ({ onChangeLayoutMode, layoutModeType, leftSidebarType, headerClass }) => {
 
 
@@ -54,6 +55,7 @@ const Header = ({ onChangeLayoutMode, layoutModeType, leftSidebarType, headerCla
         ? document.body.classList.remove("twocolumn-panel")
         : document.body.classList.add("twocolumn-panel");
     }
+
   };
   return (
     <React.Fragment>
@@ -96,26 +98,47 @@ const Header = ({ onChangeLayoutMode, layoutModeType, leftSidebarType, headerCla
             </div>
 
             <div className="d-flex align-items-center">
-              
+
               {/* FullScreenDropdown */}
-              <FullScreenDropdown />             
-              
+              <div className="text-sm-end mt-1 mt-sm-1 me-2">
+                <FullScreenDropdown />
+              </div>
               {/* Dark/Light Mode set */}
-              <LightDark
-                layoutMode={layoutModeType}
-                leftSidebarType={leftSidebarType}
-                onChangeLayoutMode={onChangeLayoutMode}
-              />
-              <div style={{}}>
+              <div className="text-sm-end mt-1 mt-sm-1 me-2">
+                <LightDark
+                  layoutMode={layoutModeType}
+                  leftSidebarType={leftSidebarType}
+                  onChangeLayoutMode={onChangeLayoutMode}
+                /></div>
+              <div className="text-sm-end mt-1 mt-sm-1 me-3">
+                <ul className="list-inline mb-0 footer-social-link ">
+                  {/* <li className="list-inline-item px-2">
+                    <a href="https://discord.gg/dzXAdqwrCU" target="_blank" rel="noreferrer noopener" className="avatar-xs d-block">
+                      <div className="social-media-size avatar-title rounded-circle">
+                        <i className="ri-discord-fill"></i>
+                      </div>
+                    </a>
+                  </li> */}
+                  <li className="list-inline-item px-1">
+                  <ModalFeedback/>
+                  </li>
+                  
+                  <li className="list-inline-item px-2">
+                    <a href="https://twitter.com/Cryptoracleio" target="_blank" rel="noreferrer noopener" className="avatar-xs d-block">
+                      <div className="social-media-size avatar-title rounded-circle">
+                        <i className="ri-twitter-fill"></i>
+                      </div>
+                    </a>
+                  </li>
+
+                </ul>
+              </div>
+              <div>
                 <Login />
               </div>
-              <div style={{marginRight:0}}>
-                <ModalC />
-              </div>
-
-              {/* NotificationDropdown */}
-
-        
+              {/* <div>
+                <ModalCTest />
+              </div> */}
             </div>
           </div>
         </div>

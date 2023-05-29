@@ -3,12 +3,7 @@ import { Container,Row } from 'reactstrap';
 import BreadCrumb from  "../Components/Common/BreadCrumb";
 import Widgets2 from "../Components/Common/Widgets2"
 import Widgets from "../Components/Common/Widgets"
-
-
-
-
-
-
+import Loader from '../Components/Common/Loader';
 
 const NearHighlights = () => {
     const [data, setData] = useState({});
@@ -23,12 +18,17 @@ const init = async () => {
     //console.log("Zero log",zero);
     setData(zero)
     setReady(true);
+    
 };
 
 useEffect(() => {
     init();
 }, []);
-if(!ready) return <Container fluid={true}>Loading...</Container>
+if(!ready) return <div className="page-content">
+        <Container fluid={true}>
+            <Loader />
+        </Container>
+    </div>
     return (
         <React.Fragment>
             <div className="page-content">
@@ -43,7 +43,7 @@ if(!ready) return <Container fluid={true}>Loading...</Container>
                 </Container>
             </div>
             {!data &&
-                                            <div>Loading...</div>
+                                            <div><Loader /></div>
                                         }
         </React.Fragment>
     );

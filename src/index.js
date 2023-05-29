@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "./store";
 import { initContract } from './near-api'
 const reactRoot = createRoot(document.querySelector('#root'));
-
+//
 window.nearInitPromise = initContract()
   .then(() => {
 reactRoot.render(

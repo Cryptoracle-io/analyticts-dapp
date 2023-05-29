@@ -28,7 +28,7 @@ const BlogDetailsContainer = ({data}) => {
 
                             <CardBody>
                                 {BlogClassicData && BlogClassicData.map((item, key) => (
-                                    <div className={item.id === 1 ? "d-flex align-middle" : "d-flex mt-4"} key={key}>
+                                    <div className={item.id === 1 ? "d-flex mt-4" : "d-flex mt-4"} key={key}>
                                         <div className="flex-shrink-0">
                                         <Link to={item.url} className="text-reset"><img src={`${process.env.PUBLIC_URL}/${item.image}`} className="rounded img-fluid" style={{ height: "60px" }} alt={item.title}/></Link>
                                         </div>
@@ -39,7 +39,7 @@ const BlogDetailsContainer = ({data}) => {
                                     </div>
 
                                 ))}
-                                <div className="mt-3 text-center">
+                                <div className="mt-3 mb-2 text-center">
                                     <Link to="/blog" className="text-muted text-decoration-underline">View all News</Link>
                                 </div>
                             </CardBody>

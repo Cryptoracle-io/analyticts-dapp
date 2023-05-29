@@ -1,8 +1,8 @@
 import { connect, keyStores, WalletConnection } from 'near-api-js'
 import { parseNearAmount } from 'near-api-js/lib/utils/format'
-import { getConfig } from './confign'
+import { getConfig } from './near/confign'
 
-const nearConfig = getConfig('testnet')
+const nearConfig = getConfig('mainnet')
 
 // Initialize contract and set global variables
 export async function initContract() {
@@ -34,33 +34,33 @@ export function signOutNearWallet() {
 /*
   Performs a view call to contract's `viewGreeting` method, to get data from the blockchain
 */
-export async function viewBlockchainState() {
-  let account = window.walletConnection.account();
+// export async function viewBlockchainState() {
+//   let account = window.walletConnection.account();
 
-  const currentState = await account.viewFunction(
-    nearConfig.contractName,
-    'viewGreeting',
-    {},
-  );
+//   const currentState = await account.viewFunction(
+//     nearConfig.contractName,
+//     'viewGreeting',
+//     {},
+//   );
 
-  return currentState;
-}
+//   return currentState;
+// }
 
-/*
-  Calls a contract method which will manipulate blockchain state.
-*/
-export async function callSmartContractFunction(messageArg) {
-  let account = window.walletConnection.account();
+// /*
+//   Calls a contract method which will manipulate blockchain state.
+// */
+// export async function callSmartContractFunction(messageArg) {
+//   let account = window.walletConnection.account();
 
-  // Use near-api-js to perform a smart contract function call
-  const result = await account.functionCall({
-    contractId: nearConfig.contractName,
-    methodName: 'setGreeting',
-    args: {
-      'message': messageArg
-    },
-    gas: '300000000000000',
-  });
+//   // Use near-api-js to perform a smart contract function call
+//   const result = await account.functionCall({
+//     contractId: nearConfig.contractName,
+//     methodName: 'setGreeting',
+//     args: {
+//       'message': messageArg
+//     },
+//     gas: '300000000000000',
+//   });
 
-  return result;
-}
+//   return result;
+// }

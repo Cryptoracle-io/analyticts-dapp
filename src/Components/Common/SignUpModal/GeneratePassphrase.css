@@ -1,0 +1,71 @@
+.passphrase-container {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f7f7f7;
+}
+
+.text-muted {
+    margin: 10px;
+    text-align: left;
+}
+
+.text {
+    color: black;
+}
+
+.phrase {
+    background-color: #d6edff;
+    margin: 5px;
+    padding: 5px;
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+}
+
+.phrase > span {
+    color: #41a6f5;
+    margin-left: 10px;
+}
+
+.phrase > label {
+    color: #1d68a9;
+    margin-left: 10px;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.buttons-container > button {
+    margin-top: 20px;
+    background-color: #f0f0f1;
+    border: none;
+    color: #1d68a9;
+}
+
+.buttons-container > button > svg {
+    color: #b5b5b9;
+    width: 15px;
+    margin-right: 10px;
+}
+
+.step-3-buttons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.step-3-buttons-container > button {
+    margin: 10px 0px;
+}
+
+.word-number {
+    text-align: left;
+}
