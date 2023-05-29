@@ -2,7 +2,7 @@
 
 ### The best analytics dapp, Discovering, interpreting, and communicating significant patterns. Crypto, NFTs, DeFi and Gaming.
 
-![alt text]([https://near.org/wp-content/uploads/2022/10/built-1024x233.png](https://pbs.twimg.com/profile_banners/1576728125848920065/1682007369/1500x500))
+![Docusaurus logo](https://pbs.twimg.com/profile_banners/1576728125848920065/1682007369/1500x500)
 
 ## Milestone 1 deliverables achieved ⭐️
 
