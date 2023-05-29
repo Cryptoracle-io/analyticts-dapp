@@ -2,7 +2,7 @@
 
 ### The best analytics dapp, Discovering, interpreting, and communicating significant patterns. Crypto, NFTs, DeFi and Gaming.
 
-![alt text](https://near.org/wp-content/uploads/2022/10/built-1024x233.png)
+![alt text]([https://near.org/wp-content/uploads/2022/10/built-1024x233.png](https://pbs.twimg.com/profile_banners/1576728125848920065/1682007369/1500x500))
 
 ## Milestone 1 deliverables achieved ⭐️
 
@@ -10,6 +10,11 @@
 - Show live data of Paras.id in the dashboard).
 - Test-net launch (Collections’ trends, Collections’ Profiles, Near Highlights, Blog)
 - Get feedback from users.
+
+## Milestone 2 deliverables achieved ⭐️
+
+- Full NEAR wallet integration.
+- Full mainnet release (testnet features + Whales tracker, Whales’ Profiles, Trusted Projects).
   
 
 ## Get started instructions available Scripts
