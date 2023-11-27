@@ -3,7 +3,6 @@ import { Container,  Card, CardBody, Col, Row, CardHeader } from 'reactstrap';
 import { useParams , Link } from 'react-router-dom';
 import BreadCrumb from  "../Components/Common/BreadCrumb";
 import { Chart } from "../Components/Common/Chart";
-import ReactTooltip from 'react-tooltip';
 import { formatyocto , format } from '../helpers/lib';
 import parasicon from '../assets/images/near/paras.png';
 import Loader from '../Components/Common/Loader';
@@ -34,6 +33,11 @@ export default function CollectionProfile(props){
         const requestCollectionDailyId = await fetch(process.env.REACT_APP_API_URL + '/collection-daily?collection_id=' + collectionId);
         const resultCollectionDailyId = await requestCollectionDailyId.json();
 
+        // const requestCollectionOnsale = await fetch(process.env.REACT_APP_API_URL + '/token-series?exclude_total_burn=true&lookup_token=true&__limit=12&__sort=metadata.rank::1&collection_id=' + collectionId + '&has_price=true');
+        // const resultCollectionOnsale = await requestCollectionOnsale.json();
+
+        
+        //console.log("profile",data);
 
         let colsVolume = [];
         let colsDate = [];
@@ -50,6 +54,7 @@ export default function CollectionProfile(props){
         }
         let colsVolumeComplete = await Promise.all(colsVolume);
         let colsDateComplete = await Promise.all(colsDate);
+        //console.log("All Table helper",colsTableData);
 
 
         setReady(true);
@@ -57,13 +62,20 @@ export default function CollectionProfile(props){
         setDateSale(colsDateComplete);
         setHistoric(resultCollectionDailyId);
         setData(resultCollectionsId.data.results[0]);
-
+        
+        // setOnSaleData(resultCollectionOnsale)
+        
+        //console.log("Complete",colsTableDataComplete);
     };
 
     useEffect(() => {
         init();
     }, []);
-
+    let tog_backdrop = async () =>{
+        // let requestCollectionOnsale = await fetch(process.env.REACT_APP_API_URL + '/token-series?exclude_total_burn=true&lookup_token=true&__limit=10&__sort=metadata.rank::-1&collection_id=' + collectionId + '&has_price=true');
+        // let resultCollectionOnsale = await requestCollectionOnsale.json();
+        // setOnSaleData(resultCollectionOnsale);
+    }
     const columns = useMemo(
         () => [
             {                
@@ -194,7 +206,7 @@ export default function CollectionProfile(props){
                                 }
                             </CardBody>
                         </Card>
-                        
+                    
                         
                     </Col>
                     <Col md={9}>

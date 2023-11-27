@@ -7,6 +7,7 @@ import { Cards , Popularity , Widgets  } from '../Components/Common/utils';
 import { Tabs  } from '../Components/Common/UserProfile';
 import user from '../assets/images/users/user.png'
 import premiumuser from '../assets/images/users/premium-user.png'
+import { NearSvg } from '../Components/Common/utils';
 import * as nearAPI from "near-api-js";
 import { getConfig } from '../near/confign';
 export default function CollectionProfile(props) {
