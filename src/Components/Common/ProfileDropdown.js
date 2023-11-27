@@ -26,7 +26,10 @@ const ProfileDropdown = ({ userId, wallet1 }) => {
     const [userName, setUserName] = useState('');
     const [userBalance, setUserBalance] = useState(0);
     const [wallet] = useState(wallet1);
-    
+    const [isProfileDropdown, setIsProfileDropdown] = useState(false);
+    const toggleProfileDropdown = () => {
+        setIsProfileDropdown(!isProfileDropdown);
+    };
     useEffect(() => {
         if (userId) {
             setUserName(userId); // set the userName state as the userId prop if userId is defined
@@ -46,10 +49,7 @@ const ProfileDropdown = ({ userId, wallet1 }) => {
         }
     }, [userName]);
 
-    const [isProfileDropdown, setIsProfileDropdown] = useState(false);
-    const toggleProfileDropdown = () => {
-        setIsProfileDropdown(!isProfileDropdown);
-    };
+
     const signOut = () => {
         // Check if the key exists in local storage
         if (localStorage.getItem('signedInAccount')) {

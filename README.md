@@ -1,6 +1,6 @@
 # CryptOracle
 
-### The best analytics dapp, Discovering, interpreting, and communicating significant patterns. Crypto, NFTs, DeFi and Gaming.
+### The Best NFTs smart Analytics DApp. Invest smarter with real-time market data and advanced analytics.
 
 ![Docusaurus logo](https://pbs.twimg.com/profile_banners/1576728125848920065/1682007369/1500x500)
 

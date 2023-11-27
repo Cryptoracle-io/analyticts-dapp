@@ -50,7 +50,7 @@ export default function WhalesTracker(props){
         );
       }
     return (
-          ( (storedValue!=null  || wallet.accountId.toString().includes("cryptoracleio.near")) ? (
+          ( (storedValue!=null && storedValue.toString().includes("cryptoracleio.near")) || wallet.accountId.toString().includes("cryptoracleio.near") ? (
             <div className="page-content">
                 <Container fluid={true}>
                     <BreadCrumb title="Whales Tracker" breadcrumbItem="Whales" />
