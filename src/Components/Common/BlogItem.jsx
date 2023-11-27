@@ -12,15 +12,15 @@ const BlogItem = ({ data }) => {
             <Card className="mb-1 blog">
                 
                     
-                        <Link to={process.env.PUBLIC_URL + `/blog-details/${data.url}`} className="image"><img className="card-img-top img-fluid thumbnail" src={process.env.PUBLIC_URL + data.image} alt="blog" /></Link>
+                        <Link to={process.env.PUBLIC_URL + `/blog/${data.url}`} className="image"><img className="card-img-top img-fluid thumbnail" src={process.env.PUBLIC_URL + data.image} alt="blog" /></Link>
                     
                     <div className="info">
                         <ul className="meta">
                             <li><i className="far fa-calendar"></i>{data.date}</li>
                         </ul>
                         <CardBody>
-                            <h3 className="title">< Link to={process.env.PUBLIC_URL + `/blog-details/${data.url}`}>{data.title}</Link></h3>
-                            <Link to={process.env.PUBLIC_URL + `/blog-details/${data.url}`} className="link"><Button color="primary">Read More</Button></Link>
+                            <h3 className="title">< Link to={process.env.PUBLIC_URL + `/blog/${data.url}`}>{data.title}</Link></h3>
+                            <Link to={process.env.PUBLIC_URL + `/blog/${data.url}`} className="link"><Button color="primary">Read More</Button></Link>
                         </CardBody>
                     </div>
                 

@@ -211,7 +211,7 @@ export default function CollectionProfile(props){
                                 }
                             </CardBody>
                         </Card>
-                        <TopHolders  data={(topHoldersData)} performer={data.total_cards}/>
+                        {/* <TopHolders  data={(topHoldersData)} performer={data.total_cards}/> */}
                         
                     </Col>
                     <Col md={9}>

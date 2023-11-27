@@ -19,8 +19,9 @@ function App() {
     return (
         <VerticalLayout>
             <Switch>
-                <Route path="/blog" component={Blog} />
-                <Route path="/blog-details/:url" component ={BlogDetails} />
+                
+                <Route path="/blogs" component={Blog} />
+                <Route path="/blog/:url" component ={BlogDetails} />
                 <Route path="/whales-tracker" component={WhalesTracker} />
                 <Route path="/profile/:userId" component={WhalesProfile} />
                 <Route path="/collections/:collectionId" component={CollectionProfile} />
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/near-highlights" component={NearHighlights} />
                 <Route path="/partners" component={FeaturedCollectionsMain} />
                 <Route path="/" component={CollectionsTrends} />
+                
             </Switch>
         </VerticalLayout>
     );

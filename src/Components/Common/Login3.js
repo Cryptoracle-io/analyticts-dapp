@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
 
-import { Button } from "reactstrap";
-import { signOutNearWallet } from "../../near-api";
 import { Wallet } from '../../near/near-wallet';
 import ProfileDropdown from "./ProfileDropdown";
+import ModalCTest from "./SignUpModal/ModalCTest";
 
-
-const Login = () => {
-  
+const Login = ({ onClick }) => {
+  const [storedValue, setStoredValue] = useState('');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [wallet] = useState(new Wallet({ createAccessKeyFor: process.env.REACT_APP_CONTRACT_NAME }));
   
 
-  useEffect(() => {
-    const initialize = async () => {
-      const signedIn = await wallet.startUp();
-      setIsSignedIn(signedIn);
+useEffect(() => {
+  const initialize = async () => {
+    const signedIn = await wallet.startUp();
+    setIsSignedIn(signedIn);
+    // Get the value from local storage
+    const storedData = localStorage.getItem('signedInAccount');
+
+    // Update the state if the stored value exists
+    if (storedData) {
+      setStoredValue(storedData);
+    }
+    
 
     };
     initialize();
@@ -24,25 +30,27 @@ const Login = () => {
 
 
 
-  if (!isSignedIn) {
+  if (!isSignedIn && !storedValue) {
     return (
+
       <div>
-        
-        <Button color="primary" className="btn-success btn-label right" onClick={() => wallet.signIn()}>
-          <i className="bx bx-wallet label-icon align-middle fs-16 ms-2"></i>
-          Sign In
-        </Button>
-      </div>
+      <ModalCTest wallet1={wallet}/>
+    </div>
     );
   }
 
   return (
-    // use React Fragment, <>, to avoid wrapping elements in unnecessary divs
-    <>
+    (storedValue!=null ? (<>
+      <ProfileDropdown userId={storedValue} wallet1={wallet}/>
+      
+      {/* <button onClick={() => wallet.signOut()}>Sign Out</button> */}
+    </>):(    <>
       <ProfileDropdown userId={wallet.accountId} wallet1={wallet}/>
       
       {/* <button onClick={() => wallet.signOut()}>Sign Out</button> */}
-    </>
+    </>)
+    
+)
   );
 };
 export default Login;

@@ -146,7 +146,7 @@ const Navdata = () => {
             id: "Blog",
             label: "Blog",
             icon: <i className="ri-profile-line"></i> ,
-            link: "/blog",
+            link: "/blogs",
             stateVariables: isDashboard,
             click: function (e) {
                 e.preventDefault();

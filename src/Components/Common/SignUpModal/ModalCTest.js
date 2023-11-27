@@ -30,8 +30,12 @@ import ValidatePassphrase from "./ValidatePassphrase";
 import SigninSuccessful from "./SigninSuccessful";
 import * as naj  from 'near-api-js'
 import { NearClient } from "./../../../near/myNearConnection";
+import Login from "../Login3";
+import ProfileDropdown from "../ProfileDropdown";
+import { Wallet } from "../../../near/near-wallet";
 
-const ModalCTest = () => {
+
+const ModalCTest = ({ wallet1 }) => {
   //Wizard const 
   const [activeTab, setactiveTab] = useState(1);
   const [progressbarvalue, setprogressbarvalue] = useState(0);
@@ -45,6 +49,11 @@ const ModalCTest = () => {
     md5Username: null,
     publicKey: null
   });
+
+    
+//Wallet 
+  //const wallet = new Wallet({ createAccessKeyFor: process.env.REACT_APP_CONTRACT_NAME })
+  const [wallet] = useState(wallet1);
 
   const [modal_signUpModals, setmodal_signUpModals] = useState(false);
   function tog_signUpModals() {
@@ -90,8 +99,8 @@ const ModalCTest = () => {
     const myKeyStore =new naj.keyStores.BrowserLocalStorageKeyStore();
     const keyPair = naj.KeyPair.fromRandom('ED25519');
     const publicKey = keyPair.publicKey.toString();
-    const newAccountencoded = md5Username.toString().slice(0, 10); //naj.utils.PublicKey.fromString(md5UserName).data.toString('hex')
-    await myKeyStore.setKey("testnet", `${newAccountencoded}.${contractId}`, keyPair);
+    const newAccountencoded = md5Username.toString(); //naj.utils.PublicKey.fromString(md5UserName).data.toString('hex')
+    await myKeyStore.setKey("mainnet", `${newAccountencoded}.${contractId}`, keyPair);
     const viewMethods = ["get_accounts_count"];
     const changeMethods = ["create_subaccount"];
     await nearClient.createContract(contractId, viewMethods, changeMethods);
@@ -106,7 +115,10 @@ const ModalCTest = () => {
   return (
     <>
       <div>
-        <Button color='primary'  className="btn-success btn-label left" onClick={() => tog_signUpModals()} data-bs-toggle="modal" data-bs-target="#signupModals">Click me</Button>
+        <Button color='primary'  className="btn-primary btn-label left" onClick={() => tog_signUpModals()} data-bs-toggle="modal" data-bs-target="#signupModals">
+          <i className="bx bx-wallet label-icon align-middle fs-16 ms-2"></i>
+          Sign Up
+        </Button>
       </div>
 
       <Modal id="signupModals" tabIndex="-1" isOpen={modal_signUpModals} toggle={() => { tog_signUpModals(); }} centered>
@@ -114,7 +126,7 @@ const ModalCTest = () => {
           Sign Up
         </ModalHeader>
         <Alert color="success" className="rounded-0 mb-0">
-          <p className="mb-0">Up to <span className="fw-semibold">50% OFF</span>, Hurry up before the stock ends</p>
+          <p className="mb-0">Get a <span className="fw-semibold">Premium Suscription</span>, Hurry up sign up</p>
         </Alert>
         {error && 
           <Alert color="danger" className="rounded-0 mb-0">
@@ -275,10 +287,18 @@ const ModalCTest = () => {
 
             </TabContent>
           </Form>
+
         </ModalBody>
-        <div className="modal-footer  p-3 justify-content-center" >
-                    <p className="mb-0 text-muted">You like our service? <Button size="sm" color="link"> Small button </Button></p>
-                </div>
+        <div className="modal-footer  p-3 justify-content-center" onClick={() => {
+          tog_signUpModals();
+        }}>
+          <p className="mb-0 text-muted">Have an account already?
+            
+            <Button color="link" onClick={() => { wallet.signIn().then(() => { tog_signUpModals() }); }}>
+              Sign in
+            </Button>
+          </p>
+        </div>
       </Modal>
     </>
   );

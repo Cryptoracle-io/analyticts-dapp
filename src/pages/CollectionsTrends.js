@@ -12,6 +12,8 @@ import FeaturedCollections from '../Components/Common/FeaturedCollections'
 import FeatherIcon from "feather-icons-react";
 import Loader from '../Components/Common/Loader';
 import {NearSvg} from '../Components/Common/utils';
+import GiveAway from '../assets/images/near/giveaway.png'
+import Login from '../Components/Common/Login3';
 export default function CollectionsTrends(props){
 
     const [collections, setCollections] = useState(null);
@@ -51,8 +53,10 @@ export default function CollectionsTrends(props){
         let colsActivities = [];
         
         for(let collectionActivities of resultActivities.data.collections){
+            
             let op = axios.get(process.env.REACT_APP_API_URL + '/collections?collection_id=' + collectionActivities.collection_id + '&__lookup_collection_volumes=true') ;
             colsActivities.push(op);
+        
         }    
 
         let colDetails = await  Promise.all(colsActivities);
@@ -135,7 +139,7 @@ export default function CollectionsTrends(props){
                         return ( <div className="flex-grow-1 ms-1" key={cell.value + 1}>
                                             {cell.value > 0 ? <h6 className={"fs-16 mb-0 text-success"}><i className={"align-middle me-1 mdi mdi-trending-up"}></i>{cell.value} %</h6>
                                             : cell.value < 0 ?<h6 className={"fs-16 mb-0 text-danger"}><i className={"align-middle me-1 mdi mdi-trending-down "}></i>{cell.value} %</h6>
-                                        : <h6 className={"fs-13 mb-0"}> 0 %</h6>}
+                                        : <h6 className={"fs-13 ms-4 align-middle"}> 0 %</h6>}
                                             
                                         </div> );
                 }
@@ -226,6 +230,20 @@ export default function CollectionsTrends(props){
             <div className="page-content">
                 <Container fluid={true}>
                     <BreadCrumb title="Collections Trends" breadcrumbItem="Collections Trends" />
+                    <Row className="justify-content-center">
+                    <Col lg={8} sm={10}>
+                        <div className="text-center">
+                        <div data-aos="fade-right">   
+                        <img src={GiveAway} alt="" className="img-fluid mx-auto mb-4" />
+                        </div> 
+
+                            {/* <div className="hstack gap-2 justify-content-center mb-4">
+                            <Login />
+
+                            </div> */}
+                        </div>
+                    </Col>
+                </Row>
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="card" id="contactList">

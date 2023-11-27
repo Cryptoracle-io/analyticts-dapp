@@ -56,7 +56,7 @@ const TopHolders = ({ data, performer }) => {
                                                 </Link>
                                                 :
                                                 <Link to={'/profile/' + dataCustom.owner} data-tip data-for={dataCustom.owner + "registerTipAccount"} >
-                                                    <h6 className='toolTipButton fs-12 mb-1 ms-2'>{String(dataCustom.owner).substring(0, 24)}</h6>
+                                                    <h6 className='fs-12 mb-1 ms-2'>{String(dataCustom.owner).substring(0, 24)}</h6>
                                                 </Link>
                                             }
                                             <ReactTooltip id={dataCustom.account_id + "registerTipAccount"} place="top" effect="solid">{dataCustom.owner}</ReactTooltip>
