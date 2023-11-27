@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Button, Col, Input, InputGroup, Label, Row } from "reactstrap";
-import axios from 'axios';
-import PIC from "../../../assets/images/near/Untitled.png"
 import TermsOfServiceModal from './TermsOfServiceModal';
 import PrivacyPolicyModal from './PrivacyPolicyModal';
 const TwitterVerification = ({ toggleTab, activeTab, setError, username, setUsername }) => {

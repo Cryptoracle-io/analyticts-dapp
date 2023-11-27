@@ -2,19 +2,11 @@ import { useMemo, useEffect, useState } from 'react';
 import { Container, Card, CardBody, Col, Row, CardHeader } from 'reactstrap';
 import { useParams, Link } from 'react-router-dom';
 import BreadCrumb from "../Components/Common/BreadCrumb";
-import TopHolders from "../Components/Common/TopHolders";
-import { Chart } from "../Components/Common/Chart";
-import ReactTooltip from 'react-tooltip';
 import { formatyocto, format } from '../helpers/lib';
-import parasicon from '../assets/images/near/paras.png';
-import Loader from '../Components/Common/Loader';
-import FeatherIcon from "feather-icons-react";
-import { Near } from 'near-api-js'
 import { Cards , Popularity , Widgets  } from '../Components/Common/utils';
 import { Tabs  } from '../Components/Common/UserProfile';
 import user from '../assets/images/users/user.png'
 import premiumuser from '../assets/images/users/premium-user.png'
-import { NearSvg } from '../Components/Common/utils';
 import * as nearAPI from "near-api-js";
 import { getConfig } from '../near/confign';
 export default function CollectionProfile(props) {

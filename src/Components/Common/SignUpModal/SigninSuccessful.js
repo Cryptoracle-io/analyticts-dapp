@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PIC from "../../../assets/images/near/giveaway.png";
 
 const SigninSuccessful = ({ activeTab }) => {
   useEffect(() => {

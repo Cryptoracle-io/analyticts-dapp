@@ -1,8 +1,6 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
-
 import { featuredNFTData, featuredCollections } from "../data/FeaturedPartners"
-import Countdown from "react-countdown";
 import BreadCrumb from "../Components/Common/BreadCrumb";
 import { Link } from "react-router-dom";
 import { formatyocto, format } from '../helpers/lib';

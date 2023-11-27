@@ -13,7 +13,7 @@ import FeatherIcon from "feather-icons-react";
 import Loader from '../Components/Common/Loader';
 import {NearSvg} from '../Components/Common/utils';
 import GiveAway from '../assets/images/near/giveaway.png'
-import Login from '../Components/Common/Login3';
+
 export default function CollectionsTrends(props){
 
     const [collections, setCollections] = useState(null);
