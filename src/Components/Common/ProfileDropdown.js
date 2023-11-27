@@ -57,6 +57,10 @@ const ProfileDropdown = ({ userId, wallet1 }) => {
           // Add any other operations you want to perform when the key exists
         } else {
           // If the key doesn't exist, execute wallet.signOut()
+          localStorage.removeItem('signedInAccount'); // Replace 'myKey' with the key you want to remove
+
+          wallet.signOut();
+          wallet.signOut();
           wallet.signOut();
         }
       };
