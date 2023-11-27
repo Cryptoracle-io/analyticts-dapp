@@ -1,0 +1,10 @@
+*.env
+node_modules/
+*dev-account
+.DS_Store
+*.toml
+build/
+*.zip
+TODO.md
+TODO.mdx
+
