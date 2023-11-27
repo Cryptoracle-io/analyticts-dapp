@@ -11,6 +11,7 @@
 - Test-net launch (Collections’ trends, Collections’ Profiles, Near Highlights, Blog)
 - Get feedback from users.
 
+
 ## Milestone 2 deliverables achieved ⭐️⭐️
 
 - Full NEAR wallet integration.
