@@ -40,7 +40,7 @@ useEffect(() => {
   }
 
   return (
-    (storedValue!=null ? (<>
+    (!isSignedIn && storedValue!=null ? (<>
       <ProfileDropdown userId={storedValue} wallet1={wallet}/>
       
       {/* <button onClick={() => wallet.signOut()}>Sign Out</button> */}
