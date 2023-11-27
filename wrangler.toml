@@ -1,0 +1,25 @@
+name = "cryptoracle"
+main = "workers-site/index.js"
+account_id = "920bf9e515ec8b220dfbd9e301954789"
+site = {bucket = "./build"}
+compatibility_date = "2023-05-29"
+workers_dev = true
+
+[vars]
+GENERATE_SOURCEMAP = false
+
+
+
+
+
+[env.production]
+workers_dev = false
+route = { pattern = "app.cryptoracle.io/*", zone_name = "cryptoracle.io" }
+services = [
+  { binding = "img", service = "images-production", environment = "production" },
+  { binding = "vapi3", service = "vapi3", environment = "production" }
+]
+[env.production.vars]
+GENERATE_SOURCEMAP = false
+
+

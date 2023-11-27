@@ -29,9 +29,10 @@ const Login = () => {
 
     return (
       <>
-        <Button color="primary" className="btn-success btn-label right" onClick={() => wallet.signIn()}>
-          <i className="bx bx-wallet label-icon align-middle fs-16 ms-2"></i>
-          Sign In
+
+              <Button color="link"  onClick={() => wallet.signIn()}>
+          
+          Login
         </Button>
       </>
     );

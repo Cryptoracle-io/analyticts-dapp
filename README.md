@@ -11,11 +11,19 @@
 - Test-net launch (Collections’ trends, Collections’ Profiles, Near Highlights, Blog)
 - Get feedback from users.
 
-## Milestone 2 deliverables achieved ⭐️
+
+## Milestone 2 deliverables achieved ⭐️⭐️
 
 - Full NEAR wallet integration.
 - Full mainnet release (testnet features + Whales tracker, Whales’ Profiles, Trusted Projects).
   
+## Milestone 3 deliverables achieved ⭐️⭐️⭐️
+
+- Marketing implementation (dropping subscriptions, Twitter campaigns giveaways, etc).
+- 10 partnerships with NFT projects in the ecosystem
+- 1,000 new NEAR wallets created.
+- 1000 unique visitors per week with a bounce rate of less than 50%.
+- 1,000 Twitter followers
 
 ## Get started instructions available Scripts
 

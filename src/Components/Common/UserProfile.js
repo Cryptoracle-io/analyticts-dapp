@@ -242,7 +242,7 @@ const ExploreNow = (items = 31) => {
                                     </div></div>
                             </div>
                             <CardBody>
-                                <p className="fw-medium mb-0 float-end"><i className="mdi-asterisk text-danger align-middle"></i>Score:{formatNumber(item.metadata.score)} Rank:{formatNumber(item.metadata.rank, 0)}</p>
+                                <p className="fw-medium mb-0 float-end"><i className="mdi mdi-asterisk text-danger align-middle"></i>Score:{formatNumber(item.metadata.score)} Rank:{formatNumber(item.metadata.rank, 0)}</p>
                                 { item.price > 0 ? <h5 className="text-primary"><NearSvg size=".7em"/> {formatyocto(item.price, 1)}</h5>
                                     : <h6 className="text-primary mt-1 ">Place an offer </h6>}
                                 <h6 className="fs-15 mb-3"><Link to="" className="link-dark">{item.metadata.title}</Link></h6>

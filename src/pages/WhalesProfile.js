@@ -13,7 +13,8 @@ import { Near } from 'near-api-js'
 import { Cards , Popularity , Widgets  } from '../Components/Common/utils';
 import { Tabs  } from '../Components/Common/UserProfile';
 import user from '../assets/images/users/user.png'
-
+import premiumuser from '../assets/images/users/premium-user.png'
+import { NearSvg } from '../Components/Common/utils';
 import * as nearAPI from "near-api-js";
 import { getConfig } from '../near/confign';
 export default function CollectionProfile(props) {
@@ -75,12 +76,22 @@ export default function CollectionProfile(props) {
                     <CardBody className="mt-4" >
                         <Row className="position-relative mb-4 ms-auto">
                             <Col md={1} className="ms-3">
+                                
+                                
+                            {userId.toString().includes("cryptoracleio.near") ? (
+      <img className="mb-4 align-items-center rounded-circle text-center"
+      alt="200x200"
+        src={premiumuser}
+        style={{ maxWidth: 200 }}
+      />
+    ) : (
                                 <img className="mb-4 align-items-center rounded-circle text-center"
                                     alt="200x200"
                                     src={(profileData && profileData.data && profileData.data.results[0] && profileData.data.results[0].imgUrl
                                         ? (process.env.REACT_APP_IMAGES + '/image-resizing?width=200&image=' + process.env.REACT_APP_IPFS_URL2 + '/' + (profileData.data.results[0].imgUrl.replace("ipfs://", "",)))
                                         : user)}
                                     style={{ maxWidth: 200 }} />
+                                    )}
                             </Col>
                             
                             <Col md={5} className="ms-5 align-items-center " >
@@ -100,7 +111,7 @@ export default function CollectionProfile(props) {
                                 <Widgets Label={"Total Items"} prefix="" decimal="" Icon={"ri-hand-coin-line"} counter={tokensData.count}/>
                             </Col>
                             <Col>
-                                <Widgets Label={"Account Balance"} Icon={"ri-money-dollar-circle-fill"} prefix="" counter={userBalance}/>
+                                <Widgets Label={"$Near Balance"} Icon={"ri-money-dollar-circle-fill"} prefix="" counter={userBalance}/>
                             </Col>
                         </Row>
                         <Row>

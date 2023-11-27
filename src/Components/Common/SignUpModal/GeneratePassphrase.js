@@ -17,7 +17,7 @@ const GeneratePassphrase = ({
     const generatePassphrase = () => {
         const {seedPhrase, publicKey, secretKey} = generateSeedPhrase();
         const passphraseArray = seedPhrase.split(" ");
-        console.log(passphraseArray);
+        
         setCurrentPassphrase(passphraseArray);
         setAccount({...account, publicKey: publicKey});
         const randomIndex = passphraseArray.length;

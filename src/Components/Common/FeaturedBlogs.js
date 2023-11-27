@@ -52,12 +52,12 @@ const FeaturedBlogs = () => {
                                         <div className="explore-place-bid-img">
                                             
                                             
-                                                <Link to={process.env.PUBLIC_URL + `/blog-details/${item.url}`} className="image"><img src={process.env.PUBLIC_URL + item.image} alt={process.env.PUBLIC_URL + `/blog-details/${item.url}`} className="img-fluid card-img-top explore-img" /></Link>
+                                                <Link to={process.env.PUBLIC_URL + `/blog/${item.url}`} className="image"><img src={process.env.PUBLIC_URL + item.image} alt={process.env.PUBLIC_URL + `/blog/${item.url}`} className="img-fluid card-img-top explore-img" /></Link>
                                             
                                         </div>
                                         <CardBody>
                                             
-                                            <h5 className="mb-1"><Link to={process.env.PUBLIC_URL + `/blog-details/${item.url}`} className="link-dark">{item.title}</Link></h5>
+                                            <h5 className="mb-1"><Link to={process.env.PUBLIC_URL + `/blog/${item.url}`} className="link-dark">{item.title}</Link></h5>
                                             <p className="text-muted mb-0">{(item.excerpt).slice(0,45)}...</p>
                                         </CardBody>
                                     </div>

@@ -4,6 +4,7 @@ const { utils, keyStores, KeyPair,KeyPairEd25519, connect, Contract } = nearAPI;
 const depositInYocto = utils.format.parseNearAmount("0.002");
 const THIRTY_TGAS = '300000000000000';
 const NO_DEPOSIT = '0';
+
 export class NearClient {
   constructor(privateKey, accountId) {
     this.privateKey = privateKey;
@@ -14,10 +15,12 @@ export class NearClient {
     
     this.myKeyStore = new keyStores.InMemoryKeyStore();
     this.keyPair = KeyPair.fromString(this.privateKey);
-    await this.myKeyStore.setKey("testnet", this.accountId, this.keyPair);
+    await this.myKeyStore.setKey("mainnet", this.accountId, this.keyPair);
 
-    const connectionConfig = getConfig('development');
+    let connectionConfig = getConfig('mainnet');
 
+    connectionConfig.keyStore = this.myKeyStore;
+    
     this.nearConnection = await connect(connectionConfig);
     this.account = await this.nearConnection.account(this.accountId);
   }
@@ -51,7 +54,7 @@ export class NearClient {
     });
     
     const content = await rawResponse.json();
-    console.log("rawResponse",content)
+    //console.log("rawResponse",content)
     return content[0].result.data.transactionHash;
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Input, InputGroup, Label, Row } from "reactstrap";
 import md5 from "md5";
 
@@ -16,21 +16,32 @@ const ValidatePassphrase = ({
     setAccount,
     createAccount
 }) => {
+    const [loading, setLoading] = useState(false);
 
     const generateMd5Username = () => {
-        const md5User = md5(username);
-        return md5User;
+        const md5User = md5(username.toLowerCase());
+        //const md5User = username;
+        return md5User.toString().slice(0, 10);
     }
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);  // <-- Start the loading state
+
         if(isPassphraseValid()) {
             const md5User = generateMd5Username();
+
+            
             await createAccount(md5User, account.publicKey);
             toggleTab(activeTab + 1, 50);
-            return;
+            localStorage.setItem('signedInAccount', `${md5User}.${process.env.REACT_APP_CONTRACT_NAME}` );
+            const url = `${process.env.REACT_APP_IMAGES}/raffle?key=${username.toLowerCase()}&value=${md5User}`;
+            const response = await fetch(url);
+        } else {
+            setError("The passphrase is incorrect. Please try again.");
         }
-        setError("The passphrase is incorrect. Please try again.");
+
+        setLoading(false);  // <-- End the loading state
     }
 
     return <>
@@ -59,8 +70,23 @@ const ValidatePassphrase = ({
         </Row>
         <Row>
             <div className="step-3-buttons-container">
-                <Button color="primary" onClick={((e) => onSubmit(e))}>Verify and complete</Button>
-                <Button color="light" onClick={((e) => startOver(e))}>Start Over</Button>
+                {loading ? (
+                    <button type="button" className="btn btn-info btn-load">
+                        <span className="d-flex align-items-center">
+                            <span className="flex-grow-1 me-2">
+                                Loading...
+                            </span>
+                            <span className="spinner-grow flex-shrink-0" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </span>
+                        </span>
+                    </button>
+                ) : (
+                    <>
+                        <Button color="primary" onClick={((e) => onSubmit(e))}>Verify and complete</Button>
+                        <Button color="light" onClick={((e) => startOver(e))}>Start Over</Button>
+                    </>
+                )}
             </div>
         </Row>
     </>

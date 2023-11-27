@@ -10,6 +10,7 @@ import {NearSvg} from './utils';
 
 //import images
 import avatar1 from "../../assets/images/users/user.png";
+import avatar2 from "../../assets/images/users/premium-user.png";
 async function RPCCALL(user) {
     const { connect } = nearAPI;
 
@@ -20,40 +21,65 @@ async function RPCCALL(user) {
     return formatyocto(balance.total,2);
 }
 
-   
+  
 const ProfileDropdown = ({ userId, wallet1 }) => {
-    const [userName, setUserName] = useState(false);
+    const [userName, setUserName] = useState('');
     const [userBalance, setUserBalance] = useState(0);
     const [wallet] = useState(wallet1);
+    
     useEffect(() => {
-        setUserName(userId); // set the userName state as the userId prop
+        if (userId) {
+            setUserName(userId); // set the userName state as the userId prop if userId is defined
+        }
     }, [userId]);
 
-    RPCCALL(userName) // call the RPCCALL function with the userId
-    .then(userbalance => {
-        setUserBalance(userbalance);
-    })
-    .catch(err => {
-        console.error(err);
-        // handle error
-    });
+    useEffect(() => {
+        if (userName) {
+            RPCCALL(userName)
+                .then(userbalance => {
+                    setUserBalance(userbalance);
+                })
+                .catch(err => {
+                    console.error(err);
+                    // handle error
+                });
+        }
+    }, [userName]);
+
     const [isProfileDropdown, setIsProfileDropdown] = useState(false);
     const toggleProfileDropdown = () => {
         setIsProfileDropdown(!isProfileDropdown);
     };
+    const signOut = () => {
+        // Check if the key exists in local storage
+        if (localStorage.getItem('signedInAccount')) {
+          localStorage.removeItem('signedInAccount'); // Replace 'myKey' with the key you want to remove
+          // Add any other operations you want to perform when the key exists
+        } else {
+          // If the key doesn't exist, execute wallet.signOut()
+          wallet.signOut();
+        }
+      };
+       
     return (
         <React.Fragment>
             <Dropdown isOpen={isProfileDropdown} toggle={toggleProfileDropdown} className="ms-sm-3 header-item topbar-user">
-                <DropdownToggle tag="button" type="button" className="btn">
-                    <span className="d-flex align-items-center">
-                        <img className="rounded-circle header-profile-user" src={avatar1}
-                            alt="Header Avatar" />
-                        <span className="text-start ms-xl-2">
-                            <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{userName}</span>
-
-                        </span>
-                    </span>
-                </DropdownToggle>
+            <DropdownToggle tag="button" type="button" className="btn">
+  <span className="d-flex align-items-center">
+    
+      <img
+        className="rounded-circle header-profile-user"
+        src={(userName && userName.toString().includes("cryptoracleio.near") ? (avatar2):(avatar1))}
+        alt="Header Avatar"
+      />
+    
+    <span className="text-start ms-xl-2">
+    <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">
+        {userName && userName.toString().slice(0, 15)}
+        </span>
+    </span>
+  </span>
+</DropdownToggle>
                 <DropdownMenu className="dropdown-menu-end">
 
                     <h6 className="dropdown-header">Welcome {userName}!</h6>
@@ -62,14 +88,19 @@ const ProfileDropdown = ({ userId, wallet1 }) => {
                     <div className="dropdown-divider"></div>
                     <DropdownItem ><i
                         className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                            className="align-middle">Balance : <b><NearSvg size=".8em"/> {userBalance}</b></span></DropdownItem>
+                            className="align-middle">Balance : <b><NearSvg size=".8em" /> {userBalance}</b></span></DropdownItem>
                     {/* <DropdownItem href={process.env.PUBLIC_URL + "/pages-profile-settings"}><span
                         className="badge bg-soft-success text-success mt-1 float-end">New</span><i
                             className="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                 className="align-middle">Settings</span></DropdownItem> */}
                     <DropdownItem href={process.env.PUBLIC_URL + "/logout"}>
                         <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
-                        <span className="align-middle" data-key="t-logout" onClick={() => wallet.signOut()} >Logout</span>
+                        <span
+                            className="align-middle"
+                            data-key="t-logout"
+                            onClick={() => signOut()} // Call the function to delete from local storage or sign out
+                        > Logout
+                        </span>
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
